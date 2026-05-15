@@ -1,0 +1,50 @@
+[project]
+name = "twinstar-ble-controller"
+version = "0.1.0"
+description = "Reverse-engineered BLE controller for Twinstar S-Series aquarium LED fixtures."
+requires-python = ">=3.10"
+dependencies = [
+    "bleak>=3.0.2",
+]
+
+[project.optional-dependencies]
+dev = [
+    "mdformat>=0.7",
+    "pytest>=9",
+    "pytest-asyncio>=1.3",
+    "ruff>=0.15",
+]
+
+# Console scripts created on `pip install -e .`. After install, `twinstar-ble`
+# (etc.) live on PATH; the same modules can also be run via `python -m`.
+[project.scripts]
+twinstar-ble = "twinstar_ble:main"
+twinstar-vibe = "twinstar_ble.vibe:main"
+twinstar-scan = "twinstar_ble.scan:main"
+twinstar-enumerate = "twinstar_ble.enumerate:main"
+
+[tool.setuptools]
+packages = ["twinstar_ble"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+# auto: every async test function is treated as a coroutine without needing
+# @pytest.mark.asyncio on each one. Less ceremony, fits this codebase.
+asyncio_mode = "auto"
+filterwarnings = [
+    "error",  # surface warnings as test failures
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+# Sensible defaults plus pyupgrade, bugbear, comprehensions, simplify, isort.
+select = ["E", "F", "W", "I", "B", "C4", "SIM", "UP"]
+ignore = [
+    "E501",  # line length is governed by the formatter, not the linter
+]
+
+[tool.ruff.format]
+quote-style = "double"
