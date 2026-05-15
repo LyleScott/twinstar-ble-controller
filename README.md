@@ -33,7 +33,9 @@ The first positional arg accepts either a literal BLE address or a name substrin
 twinstar-ble twinstar on
 twinstar-ble twinstar a 50               # master 50%
 twinstar-ble twinstar r 100              # red full
-twinstar-ble twinstar w 50               # grow / white
+twinstar-ble twinstar g 75               # green 75%
+twinstar-ble twinstar b 25               # blue 25%
+twinstar-ble twinstar w 50               # grow / white 50%
 twinstar-ble twinstar query color        # → color: R=  0%  G= 68%  B= 68%  W=  0%
 twinstar-ble twinstar query power        # → power: on
 twinstar-ble twinstar query brightness   # → brightness: 100%
