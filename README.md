@@ -4,14 +4,7 @@ A reverse-engineered Bluetooth controller for the [Twinstar Light S-Series Pro /
 
 ![twinstar-vibe day-cycle preview](docs/vibe.gif)
 
-That's `twinstar-vibe`, one full tank-day compressed into eight seconds. How to read it, top to bottom:
-
-- **master** scales every channel; it's the overall dimmer.
-- The four meters are the raw R/G/B/W channel intensities (0-100) being pushed to the fixture each tick. W is the warm grow LED, not neutral white.
-- The solid bar above the tank is the predicted mixed color the LEDs emit, derived from the four channels weighted by `master`.
-- The tank itself is that same color attenuated through (faked) water and plants, so you can sanity-check what the room will actually look like before you commit a schedule.
-
-Driving the real fixture sends the exact same numbers over BLE on the same cadence; the preview is `twinstar-vibe --no-send`.
+That's `twinstar-vibe` exercising the full feature set: master dim plus the four R/G/B/W channels, walked through a day cycle. The terminal preview tracks the real fixture in lockstep.
 
 Built and tested against a Twinstar Light S-Series Version V, 450S V (GAP name `Twinstar_Dimmer` / `Twinstar Light Pro`). Other S-Series V sizes almost certainly speak the same protocol; older S-Series and the C-Series were not tested.
 
