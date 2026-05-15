@@ -2,6 +2,17 @@
 
 A reverse-engineered Bluetooth controller for the [Twinstar Light S-Series Pro / Dimmer](https://twinstareu.com/twinstar-light/twinstar-s-line-v/) aquarium LED, because the official app is bad and the fixture deserves better.
 
+![twinstar-vibe day-cycle preview](docs/vibe.gif)
+
+That's `twinstar-vibe`, one full tank-day compressed into eight seconds. How to read it, top to bottom:
+
+- **master** scales every channel; it's the overall dimmer.
+- The four meters are the raw R/G/B/W channel intensities (0-100) being pushed to the fixture each tick. W is the warm grow LED, not neutral white.
+- The solid bar above the tank is the predicted mixed color the LEDs emit, derived from the four channels weighted by `master`.
+- The tank itself is that same color attenuated through (faked) water and plants, so you can sanity-check what the room will actually look like before you commit a schedule.
+
+Driving the real fixture sends the exact same numbers over BLE on the same cadence; the preview is `twinstar-vibe --no-send`.
+
 Built and tested against a Twinstar Light S-Series Version V, 450S V (GAP name `Twinstar_Dimmer` / `Twinstar Light Pro`). Other S-Series V sizes almost certainly speak the same protocol; older S-Series and the C-Series were not tested.
 
 ## Why
@@ -59,9 +70,7 @@ twinstar-enumerate $A                    # full GATT dump
 
 ## Vibe mode
 
-A small day-cycle animation (`night → sunrise → noon → sunset → night`) that drives the fixture and paints a synced 24-bit ANSI preview of the tank in your terminal: the mixed light bar on top, four per-channel R/G/B/W meters, and a `}`-plant tank tinted by the current mix.
-
-![twinstar-vibe day-cycle preview](docs/vibe.gif)
+The day-cycle animation at the top of this README. Walks `night → sunrise → noon → sunset → night` and drives the fixture in step.
 
 ```bash
 twinstar-vibe twinstar              # ~30s/cycle, loops until Ctrl-C
