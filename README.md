@@ -59,7 +59,9 @@ twinstar-enumerate $A                    # full GATT dump
 
 ## Vibe mode
 
-A small day-cycle animation (`night → sunrise → noon → sunset → night`) that drives the fixture and paints a synced 24-bit ANSI preview of the tank in your terminal.
+A small day-cycle animation (`night → sunrise → noon → sunset → night`) that drives the fixture and paints a synced 24-bit ANSI preview of the tank in your terminal: the mixed light bar on top, four per-channel R/G/B/W meters, and a `}`-plant tank tinted by the current mix.
+
+![twinstar-vibe day-cycle preview](docs/vibe.gif)
 
 ```bash
 twinstar-vibe twinstar              # ~30s/cycle, loops until Ctrl-C
@@ -67,6 +69,8 @@ twinstar-vibe twinstar --cycles 4   # finite
 twinstar-vibe twinstar --speed 0.25 # slower
 twinstar-vibe --no-send             # preview only, no fixture
 ```
+
+The GIF above is recorded from `twinstar-vibe --no-send --speed 4 --cycles 1`; regenerate it with `vhs docs/vibe.tape` after any render changes.
 
 Defaults are tuned to be gentle on the fixture: 0.6s pacing between writes and a `≥3` channel-change threshold, so steady-state write rate is comparable to slowly dragging a slider in the official app. Raise `--pacing` and prefer `--cycles N` over looping forever if you want to be extra cautious.
 
