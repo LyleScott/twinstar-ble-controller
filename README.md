@@ -2,7 +2,7 @@
 
 A reverse-engineered Bluetooth controller for the [Twinstar Light S-Series Pro / Dimmer](https://twinstareu.com/twinstar-light/twinstar-s-line-v/) aquarium LED, because the official app is bad and the fixture deserves better.
 
-You can turn it on and off, dim it, and control the R/G/B/W channels individually.
+You can turn it on and off, dim it, and control the R/G/B/W channels individually, all from the command line, or build your own thing using it as a library.
 
 ![twinstar-vibe demo](docs/vibe.gif)
 
