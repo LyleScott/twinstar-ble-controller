@@ -142,6 +142,15 @@ class TestRender:
         assert "12:00" in joined
         assert "noon" in joined
 
+    def test_renders_one_meter_bar_per_channel(self):
+        scene = vibe.Scene(90, 30, 10, 60, 75)
+        joined = "\n".join(vibe.render(scene, "sunrise", 0.25, 1.0, sending=True))
+        # Each channel label appears as a foreground-colored single letter
+        # followed by the meter bar; check both the label and its level readout.
+        for label, level in (("R", 90), ("G", 30), ("B", 10), ("W", 60)):
+            assert label in joined
+            assert f" {level:>3}" in joined
+
     def test_indicates_send_mode_in_footer(self):
         joined_send = "\n".join(
             vibe.render(vibe.Scene(0, 0, 0, 0, 0), "night", 0.0, 1.0, sending=True)

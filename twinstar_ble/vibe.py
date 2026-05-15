@@ -130,6 +130,16 @@ HIDE_CURSOR = "\x1b[?25l"
 SHOW_CURSOR = "\x1b[?25h"
 WIDTH = 60  # interior width of the tank
 
+# Display colors for the per-channel meter bars. Punchy enough to read on
+# both light and dark terminal themes, while still suggesting the LED color.
+# W is warm rather than neutral to match the grow / white LED's actual hue.
+_CHANNEL_DISPLAY_COLORS: dict[str, tuple[int, int, int]] = {
+    "R": (255, 55, 55),
+    "G": (55, 220, 80),
+    "B": (90, 110, 255),
+    "W": (250, 200, 140),
+}
+
 
 def _bg(rgb: tuple[int, int, int]) -> str:
     return f"\x1b[48;2;{rgb[0]};{rgb[1]};{rgb[2]}m"
@@ -143,6 +153,30 @@ def _wallclock(phase: float) -> str:
     """Phase [0,1) -> a 24h clock string."""
     minutes = int(phase * 24 * 60)
     return f"{minutes // 60:02d}:{minutes % 60:02d}"
+
+
+def _channel_bar(label: str, level: int) -> str:
+    """One horizontal level meter for a single channel.
+
+    Filled portion is the channel's full color, empty portion is a dim
+    version of the same hue so the bar still reads as e.g. "red" when off.
+    Aligns visually under the mixed-light bar above the tank.
+    """
+    color = _CHANNEL_DISPLAY_COLORS[label]
+    dim = _scale(color, 0.14)
+    bar_w = WIDTH - 8  # leaves room for "  X  " prefix and " NNN" suffix
+    level = max(0, min(100, level))
+    filled = round(bar_w * level / 100)
+    return (
+        f"  {_fg(color)}{label}{RESET}  "
+        + _bg(color)
+        + " " * filled
+        + RESET
+        + _bg(dim)
+        + " " * (bar_w - filled)
+        + RESET
+        + f" {level:>3}"
+    )
 
 
 def _water_row(
@@ -165,15 +199,12 @@ def render(scene: Scene, label: str, phase: float, speed: float, sending: bool) 
     title = (
         f"  TWINSTAR 450S V    {label:<10}  \u00b7  {_wallclock(phase)}  \u00b7  {speed:g}x speed"
     )
-    values = (
-        f"  R{scene.r:>4}    G{scene.g:>4}    B{scene.b:>4}    W{scene.w:>4}"
-        f"    \u00b7    master {scene.a:>3}"
-    )
+    master = f"  master {scene.a:>3}"
 
     box_top = "  \u256d" + "\u2500" * WIDTH + "\u256e"
     box_bot = "  \u2570" + "\u2500" * WIDTH + "\u256f"
 
-    bar = "  " + _bg(light_rgb) + " " * WIDTH + RESET  # the light fixture itself
+    light_bar = "  " + _bg(light_rgb) + " " * WIDTH + RESET  # mixed fixture color
 
     mode = "\x1b[32msending\x1b[0m" if sending else "\x1b[33mpreview only (--no-send)\x1b[0m"
     footer = f"    Ctrl-C to exit  \u00b7  {mode}"
@@ -182,9 +213,13 @@ def render(scene: Scene, label: str, phase: float, speed: float, sending: bool) 
         "",
         box_top,
         "  \u2502" + title.ljust(WIDTH) + "\u2502",
-        "  \u2502" + values.ljust(WIDTH) + "\u2502",
+        "  \u2502" + master.ljust(WIDTH) + "\u2502",
         box_bot,
-        bar,
+        light_bar,
+        _channel_bar("R", scene.r),
+        _channel_bar("G", scene.g),
+        _channel_bar("B", scene.b),
+        _channel_bar("W", scene.w),
         box_top,
         _water_row(water_rgb, plant_rgb, [9, 23, 38, 51]),
         _water_row(water_rgb, plant_rgb, [4, 17, 31, 44, 56]),
