@@ -70,8 +70,6 @@ twinstar-vibe twinstar --speed 0.25 # slower
 twinstar-vibe --no-send             # preview only, no fixture
 ```
 
-The GIF above is recorded from `twinstar-vibe --no-send --speed 4 --cycles 1`; regenerate it with `vhs docs/vibe.tape` after any render changes.
-
 Defaults are tuned to be gentle on the fixture: 0.6s pacing between writes and a `≥3` channel-change threshold, so steady-state write rate is comparable to slowly dragging a slider in the official app. Raise `--pacing` and prefer `--cycles N` over looping forever if you want to be extra cautious.
 
 ## Examples
