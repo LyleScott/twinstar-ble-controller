@@ -2,7 +2,7 @@
 
 A reverse-engineered Bluetooth controller for the [Twinstar Light S-Series Pro / Dimmer](https://twinstareu.com/twinstar-light/twinstar-s-line-v/) aquarium LED, because the official app is bad and the fixture deserves better.
 
-A small Python package and four console scripts that speak the fixture's BLE protocol directly: power, master dim, and per-channel R/G/B/W.
+You can turn it on and off, dim it, and control the R/G/B/W channels individually.
 
 ![twinstar-vibe demo](docs/vibe.gif)
 
